@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @OnError 当 websocket 建立连接时出现异常会触发这个注解修饰的方法，注意它有一个 Session 参数
  */
 @Component
-@ServerEndpoint("/webSocket/{username}")
+@ServerEndpoint("/webSocket/{userId}")
 public class WebSocketServer {
     /**
      * concurrent包的线程安全Set，用来存放每个用户对应的Session对象。
@@ -33,21 +33,21 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(@PathParam("username") String username, Session session) throws IOException {
-        if (username == null) {
+    public void onOpen(Session session,@PathParam("userId") String userId) throws IOException {
+        if (userId == null) {
             return;
         }
-        clients.put(username, session);
-        System.out.println("用户：" + username + "已连接到websocke服务器");
+        clients.put(userId, session);
+        System.out.println("用户：" + userId + "已连接到websocke服务器");
     }
 
     /**
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("username") String username) throws IOException {
-        clients.remove(username);
-        System.out.println("用户：" + username + "已离开websocket服务器");
+    public void onClose(@PathParam("userId") String userId) throws IOException {
+        clients.remove(userId);
+        System.out.println("用户：" + userId + "已离开websocket服务器");
     }
 
     /**
@@ -57,14 +57,20 @@ public class WebSocketServer {
     public void onMessage(String json) throws IOException {
         System.out.println("前端发送的信息为：" + json);
         JSONObject jsonObject = new JSONObject(json);
-        String user = jsonObject.getStr("user");
-        String msg = jsonObject.getStr("msg");
-        Session session = clients.get(user);
+        String fromUser = jsonObject.getStr("from");
+        String toUser = jsonObject.getStr("to");
+        String mes = jsonObject.getStr("text");
+        Session toSession = clients.get(toUser);
         //如果这个好友在线就直接发给他
-        if (session != null) {
-            sendMessageTo(msg,session);
+        if (toSession != null) {
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("from", fromUser);
+            jsonObject1.put("text", mes);
+            jsonObject1.put("type", 2);
+            String mesTo = jsonObject1.toString();
+            sendMessageTo(mesTo, toSession);
         } else {
-            System.out.println("对方不在线，对方名字为：" + user);
+            System.out.println("对方不在线，对方id为：" + toUser);
         }
     }
 

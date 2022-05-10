@@ -506,7 +506,7 @@ let app = new Vue({
                         if(typeof (WebSocket) == "undefined"){
                                 console.log("您的浏览器不支持websocket");
                         }else{
-                                let socketUrl = "ws://localhost:8084/socket/"+this.user_id;
+                                let socketUrl = "ws://localhost:8080/webSocket/"+this.user_id;
                                 if(socket!=null){
                                         socket.close();
                                         socket = null;
@@ -523,7 +523,7 @@ let app = new Vue({
                                         {
                                                 let notice = [];
                                                 notice.type="登录提醒";
-                                                notice.content = '您于'+data.time+"登录OICQ";
+                                                notice.content = '您于'+data.time+"登录即时通信系统";
                                                 notice.time = myDate.getHours()+':'+myDate.getMinutes();
                                                 that.notices.push(notice);
                                         }else if(data.type===1)

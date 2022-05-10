@@ -1,8 +1,5 @@
 package com.wyq.websocket.controller;
-
-import com.sun.xml.internal.ws.resources.HttpserverMessages;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
