@@ -1,0 +1,25 @@
+server:
+  port: 8083
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/oicq?useUnicode=true&characterEncoding=utf-8&serverTimezone=CTT&useSSL=false
+    username: root
+    password: 8203
+  mail:
+    host: smtp.qq.com
+    username: 2758657741@qq.com
+    password: kjnctwrdvabvdfhe
+    protocol: smtp
+    default-encoding: UTF-8
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+mybatis:
+  type-aliases-package: com.demo1.Entity
+  mapper-locations: classpath:/mybatis/*.xml
